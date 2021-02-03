@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+
+<body>
+
+    <input type="text" name="username" id="username" autocomplete="off" placeholder="Digite el username">
+    <input type="password" name="password" id="password" autocomplete="off" placeholder="Digite el password">
+    <button id="btnEnviar">Enviar</button>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+        $(() => {
+
+            $('#btnEnviar').on('click', (e) => {
+                const username = $('#username').val();
+                const password = $('#password').val();
+                const json = {
+                    "username": username,
+                    "password": password
+                };
+                const ajax = getAjax("http://localhost:3000/jwt/login", json);
+                ajax.done((response) => {
+                    console.info("Completado");
+                    const ajaxGet = $.ajax({
+                        method: "GET",
+                        url: "http://localhost:3000/profile",
+                        dataType: 'json',
+                        headers: {
+                            "Authorization": "Bearer " + response.access_token
+                        }
+                    });
+                    ajaxGet.done((response) => {
+                        console.log(response);
+                    });
+                    ajaxGet.fail((err) => {
+                        console.log(err);
+                    });
+                });
+                ajax.fail((err) => {
+                    console.log(err);
+                });
+            });
+
+            const getAjax = (url, json) => {
+                const ajax = $.ajax({
+                    method: "POST",
+                    url: url,
+                    data: JSON.stringify(json),
+                    dataType: "json",
+                    contentType: "application/json"
+                });
+                return ajax;
+            }
+
+        });
+    </script>
+</body>
+
+</html>

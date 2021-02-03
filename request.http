@@ -1,0 +1,12 @@
+
+#GET http://localhost:3000/profile HTTP/1.1
+
+# Realizamos una peticion a la siguiente ruta
+POST http://localhost:3000/jwt/login HTTP/1.1
+content-Type: application/json
+
+{ "username": "angel", "password": "123" }
+
+
+#GET http://localhost:3000/profile HTTP/1.1
+#Authorization: Bearer 
